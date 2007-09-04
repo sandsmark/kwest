@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Kwest
+Exec=kwest %i %m -caption "%c"
+Icon=kwest
+Type=Application
+MimeType=application/x-zmachine
+Terminal=false

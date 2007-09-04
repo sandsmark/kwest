@@ -1,0 +1,15 @@
+-convert Kwest to Glk library (http://www.eblong.com/zarf/glk/),
+ so as to be able to play other game formats like IFP
+ (http://www.ifarchive.org/if-archive/programming/ifp/).
+
+-add game browser, like in http://blorple.sourceforge.net/,
+ http://www.logicalshift.co.uk/unix/zoom/, http://ccxvii.net/
+
+-auto organise save games
+-auto save game when closing
+
+-finished flag, date imported, time played, annotation, rating
+
+-first play wizard
+
+-integrate automapper
