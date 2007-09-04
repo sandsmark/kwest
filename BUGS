@@ -1,0 +1,9 @@
+-Resizing the window or changing the font size while a game is in
+ progress, can corrupt the display. Solving this requires reworking
+ the way Kwest currently handles output.
+
+-Kwest does currently not set a flag indicating it supports color.
+ It gets set in the beginning of program, but then gets reset behind
+ my back somewhere. I haven't been motivated enough to try and fix
+ this, since most games that use color do not rely on the setting of
+ this flag.
