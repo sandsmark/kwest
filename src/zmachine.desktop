@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=MimeType
-MimeType=application/x-zmachine
-Icon=kwest
-Patterns=*.z3;*.z5;*.z6;*.z8;*.zblorb;*.zlb;*.Z3;*.Z5;*.Z6;*.Z8;*.ZBLORB;*.ZLB
-DefaultApp=kwest
-Comment=Z machine code
