@@ -32,14 +32,14 @@ KDE_ICON = AUTO
 
 # this is where the kdelnk file will go 
 kdelnkdir   = $(kde_appsdir)/Games
-kdelnk_DATA = kwest.desktop zmachine.desktop
+kdelnk_DATA = kwest.desktop
 
 mimedir = $(kde_mimedir)/application
 mime_DATA = zmachine.desktop
 
 # this is where the XML-GUI resource file goes
 rcdir = $(kde_datadir)/kwest
-rc_DATA =
+rc_DATA = kwestui.rc
 kwest_SOURCES = k_audio_oss.cpp k_file.cpp k_frotz.h k_init.cpp k_input.cpp \
 	k_pic.cpp k_screen.cpp k_text.cpp kwest.cpp kwest.h kwestview.cpp kwestview.h \
 	main.cpp
