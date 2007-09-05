@@ -7,12 +7,12 @@ by David Griffith and others. (See AUTHORS file for more details.)
 
 Features of Kwest include:
 
+- support for reading zblorb files and showing cover art and treaty of
+  Babel metadata.
 - a fairly complete Z-machine interpreter, supporting color, styles
   and timed input. Not yet supported are sound and V6 pictures.
 - same input-editing facilities as Frotz: command history, tab completion
 - fonts and colors are changeable on the fly through the GUI.
-- support for reading zblorb files and showing cover art and treaty of
-  Babel metadata.
 
 The latest information on Kwest is available at the Kwest homepage at
 http://kwest.sourceforge.net.
