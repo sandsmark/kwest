@@ -44,6 +44,7 @@ f_setup_t f_setup;
 /* Story file name, id number and size */
 
 char story_name[MAX_FILE_NAME];
+char short_name[MAX_FILE_NAME];
 
 enum story story_id = UNKNOWN;
 long story_size = 0;
@@ -167,10 +168,11 @@ void z_piracy (void)
  *
  */
 
-int frotz_main(const char* filename)
+int frotz_main(const char* filename, const char* shortname)
 {
     strcpy(story_name, filename);
-
+    strcpy(short_name, shortname);
+  
     os_process_arguments(0, (char *)0);
 
     init_buffer ();
@@ -181,10 +183,11 @@ int frotz_main(const char* filename)
 
     if (frotz_fatal_error == 1)
     {	
-	strcpy(story_name,"");
-	reset_memory();
-	frotz_fatal_error = 0;
-	return -1;
+      strcpy(story_name,"");
+      strcpy(short_name,"");
+	    reset_memory();
+	    frotz_fatal_error = 0;
+	    return -1;
     }
 
     init_process ();

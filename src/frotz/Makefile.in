@@ -59,7 +59,7 @@ libLIBRARIES_INSTALL = $(INSTALL_DATA)
 LIBRARIES = $(lib_LIBRARIES)
 ARFLAGS = cru
 libfrotz_a_AR = $(AR) $(ARFLAGS)
-libfrotz_a_DEPENDENCIES = $(top_builddir)/src/babel/libbabel.a
+libfrotz_a_LIBADD =
 am_libfrotz_a_OBJECTS = buffer.$(OBJEXT) err.$(OBJEXT) \
 	fastmem.$(OBJEXT) files.$(OBJEXT) frotz_main.$(OBJEXT) \
 	hotkey.$(OBJEXT) input.$(OBJEXT) math.$(OBJEXT) \
@@ -348,7 +348,6 @@ libfrotz_a_SOURCES = buffer.c err.c fastmem.c files.c frotz.h frotz_main.c \
 	hotkey.c input.c math.c object.c process.c quetzal.c random.c redirect.c \
 	screen.c setup.h sound.c stream.c table.c text.c variable.c
 
-libfrotz_a_LIBADD = $(top_builddir)/src/babel/libbabel.a
 #>- all: all-am
 #>+ 1
 all: docs-am  all-am
@@ -668,7 +667,7 @@ uninstall-am: uninstall-info-am uninstall-libLIBRARIES
 .NOEXPORT:
 
 #>+ 2
-KDE_DIST=Makefile.in readme.txt Makefile.am 
+KDE_DIST=readme.txt Makefile.in Makefile.am 
 
 #>+ 2
 docs-am:

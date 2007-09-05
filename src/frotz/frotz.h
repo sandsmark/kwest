@@ -347,7 +347,8 @@ extern zword hx_unicode_table;
 /*** Various data ***/
 
 extern char story_name[MAX_FILE_NAME];
-
+extern char short_name[MAX_FILE_NAME];
+  
 extern enum story story_id;
 extern long story_size;
 
@@ -624,7 +625,7 @@ void	os_init_setup (void);
 int	os_speech_output(const zchar *);
 
 extern int frotz_fatal_error;
-
+  
 #include "setup.h"
 
 #ifdef __cplusplus

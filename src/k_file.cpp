@@ -50,11 +50,9 @@
 
 #define PATHSEP ':'
 #define DIRSEP '/'
-#include <iostream>
+
 FILE *pathopen(const char *name, const char *p, const char *mode, char *fullname)
-{
-    std::cout << "inside pathopen:name:" << *name << std::endl << std::flush;
-  
+{ 
 	FILE *fp;
 	char buf[FILENAME_MAX + 1];
 	char *bp, lastch;
@@ -69,7 +67,7 @@ FILE *pathopen(const char *name, const char *p, const char *mode, char *fullname
 		if (lastch != DIRSEP)
 			*bp++ = DIRSEP;
 		strcpy(bp, name);
-  	std::cout << "buf" << buf << std::endl<< std::flush; 	   
+   
 		if ((fp = fopen(buf, mode)) != NULL)
 		{
 			strncpy(fullname, buf, FILENAME_MAX);
