@@ -436,7 +436,7 @@ unsigned char KwestView::readLine(int max, zchar *buf, int timeout,
       // If we have pushed two strings in forcedInput,
       // the second one is a confirmation key by design.
 
-      if (!forcedInput.isEmpty())
+      if (!forcedInput.isEmpty() and (forcedInput.first().latin1())[0] == 'y')
       {
         forcedInput.remove(forcedInput.begin());
         key = 'y';
@@ -447,6 +447,7 @@ unsigned char KwestView::readLine(int max, zchar *buf, int timeout,
         return buf[0];
 
       writeInputLine(xPos0, (char*)buf, len, -1);
+
       return ZC_RETURN;
     }
 

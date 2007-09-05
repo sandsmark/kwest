@@ -7,3 +7,6 @@
  my back somewhere. I haven't been motivated enough to try and fix
  this, since most games that use color do not rely on the setting of
  this flag.
+
+-Sometimes saving or restoring through the icons inserts and extra
+ 'y' or return at the next line.
