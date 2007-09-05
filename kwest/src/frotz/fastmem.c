@@ -583,7 +583,6 @@ void z_restart (void)
 
 static void get_default_name (char *default_name, zword addr)
 {
-
     if (addr != 0) {
 
 	zbyte len;
@@ -613,6 +612,9 @@ static void get_default_name (char *default_name, zword addr)
 
     } else strcpy (default_name, auxilary_name);
 
+  /* PB kludge */
+  return  strcpy (default_name, short_name);
+  
 }/* get_default_name */
 
 /*
@@ -926,7 +928,7 @@ void z_save (void)
 
 	/* Get the file name */
 
-	get_default_name (default_name, (zargc >= 3) ? zargs[2] : 0);
+  get_default_name (default_name, (zargc >= 3) ? zargs[2] : 0);
 
 	if (os_read_file_name (new_name, default_name, FILE_SAVE_AUX) == 0)
 	    goto finished;

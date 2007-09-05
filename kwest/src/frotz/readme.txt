@@ -44,4 +44,6 @@ frotz.h,
 -try to improve erro handling somewhat: extern int frotz_fatal_error, checks in
  frotz_main, fast_mem.c
 
--frotz.h and frotz_main.cpp: char story_name[MAX_FILE_NAME];
+-frotz.h and frotz_main.cpp: char story_name[MAX_FILE_NAME]
+
+-frotz.h, frotz_main.cpp, fast_mem.c: char short_name[MAX_FILE_NAME]

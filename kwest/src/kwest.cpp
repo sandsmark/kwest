@@ -52,7 +52,7 @@ extern "C" jmp_buf exit_jump; // ----------------''------------------
 #include "frotz/frotz.h"
 #include "babel/babel.h"
 
-extern "C" int frotz_main(const char* filename);
+extern "C" int frotz_main(const char* filename, const char*);
 
 #define ID_STATUS_MSG 1
 #define ID_INS_MSG 2
@@ -542,7 +542,7 @@ void KwestApp::openStoryNamed(const KURL& url)
   setStatusMsg(i18n("Running story."));
   setStoryRunning(true);
 
-  int result = frotz_main(newUrl.path().latin1());
+  int result = frotz_main(newUrl.path().latin1(), url.fileName());
 
   if (result != 0)
     setCaption("", false);

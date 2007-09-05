@@ -59,7 +59,7 @@ libLIBRARIES_INSTALL = $(INSTALL_DATA)
 LIBRARIES = $(lib_LIBRARIES)
 ARFLAGS = cru
 libbabel_a_AR = $(AR) $(ARFLAGS)
-libbabel_a_DEPENDENCIES = $(top_builddir)/src/frotz/libfrotz.a
+libbabel_a_LIBADD =
 am_libbabel_a_OBJECTS = adrift.$(OBJEXT) advsys.$(OBJEXT) \
 	agt.$(OBJEXT) alan.$(OBJEXT) babel.$(OBJEXT) \
 	babel_handler.$(OBJEXT) babel_ifiction_functions.$(OBJEXT) \
@@ -356,7 +356,6 @@ libbabel_a_SOURCES = adrift.c advsys.c agt.c alan.c babel.c babel.h \
 	magscrolls.c md5.c md5.h misc.c modules.h register.c register_ifiction.c tads.c \
 	tads.h tads2.c tads3.c treaty.h treaty_builder.h zcode.c
 
-libbabel_a_LIBADD = $(top_builddir)/src/frotz/libfrotz.a
 #>- all: all-am
 #>+ 1
 all: docs-am  all-am
