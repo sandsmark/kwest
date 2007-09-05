@@ -172,7 +172,7 @@ int frotz_main(const char* filename, const char* shortname)
 {
     strcpy(story_name, filename);
     strcpy(short_name, shortname);
-  
+ 
     os_process_arguments(0, (char *)0);
 
     init_buffer ();

@@ -817,7 +817,7 @@ dist-hook:
 .NOEXPORT:
 
 #>+ 2
-KDE_DIST=stamp-h.in subdirs Makefile.in BUGS configure.files config.h.in kwest.kdevelop HOW_TO_PLAY kwest.kdevses configure.in kwest.kdevelop.pcs Makefile.cvs aclocal.m4 Doxyfile svn-commit.tmp kwest.lsm acinclude.m4 configure Makefile.am 
+KDE_DIST=stamp-h.in subdirs Makefile.in BUGS configure.files config.h.in kwest.kdevelop HOW_TO_PLAY kwest.kdevses configure.in kwest.kdevelop.pcs Makefile.cvs aclocal.m4 Doxyfile kwest.lsm acinclude.m4 configure Makefile.am 
 
 #>+ 2
 docs-am:
