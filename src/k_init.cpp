@@ -96,14 +96,15 @@ void os_process_arguments(int argc, char *argv[])
   f_setup.script_cols = 80;
   f_setup.err_report_mode = ERR_REPORT_NEVER;
 
-  /* Strip path off the story file name */
+  /* Strip path off the story file name
+     This used to use story_name and short_name*/
 
-  char* p = (char *)story_name;
+  char* p = (char *)short_name;
 
   int i;
-  for (i = 0; story_name[i] != 0; i++)
-    if (story_name[i] == '/')
-      p = (char *)story_name + i + 1;
+  for (i = 0; short_name[i] != 0; i++)
+    if (short_name[i] == '/')
+      p = (char *)short_name + i + 1;
 
   for (i = 0; p[i] != '\0'; i++)
     semi_stripped_story_name[i] = p[i];

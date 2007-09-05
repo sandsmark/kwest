@@ -611,9 +611,6 @@ static void get_default_name (char *default_name, zword addr)
 	    strcpy (default_name + i, ".AUX");
 
     } else strcpy (default_name, auxilary_name);
-
-  /* PB kludge */
-  return  strcpy (default_name, short_name);
   
 }/* get_default_name */
 
@@ -929,6 +926,7 @@ void z_save (void)
 	/* Get the file name */
 
   get_default_name (default_name, (zargc >= 3) ? zargs[2] : 0);
+
 
 	if (os_read_file_name (new_name, default_name, FILE_SAVE_AUX) == 0)
 	    goto finished;
