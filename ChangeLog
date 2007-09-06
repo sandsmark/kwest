@@ -1,7 +1,7 @@
 Version 1.1 (20070906)
 
   - Added support for reading zblorb files.
-  - Display cover art and biographic information if present.
+  - Display cover art and bibliographic information if present.
   - Fixed bug when starting Kwest from the command line with an argument.
   - Install file associations.
   - Upgraded to Frotz 2.43.
