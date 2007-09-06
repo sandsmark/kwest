@@ -1,7 +1,50 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="0" />
+ <DocsAndViews NumberOfDocuments="14" >
+  <Doc0 NumberOfViews="1" URL="file:///home/pbienst/source/kwest/src/frotz/fastmem.c" >
+   <View0 Encoding="ISO 8859-1" line="916" Type="Source" />
+  </Doc0>
+  <Doc1 NumberOfViews="1" URL="file:///home/pbienst/source/kwest/src/kwestview.cpp" >
+   <View0 Encoding="ISO 8859-1" line="442" Type="Source" />
+  </Doc1>
+  <Doc2 NumberOfViews="1" URL="file:///home/pbienst/source/kwest/src/k_init.cpp" >
+   <View0 Encoding="ISO 8859-1" line="108" Type="Source" />
+  </Doc2>
+  <Doc3 NumberOfViews="1" URL="file:///home/pbienst/source/kwest/src/frotz/frotz_main.c" >
+   <View0 Encoding="ISO 8859-1" line="173" Type="Source" />
+  </Doc3>
+  <Doc4 NumberOfViews="1" URL="file:///home/pbienst/source/kwest/src/frotz/frotz.h" >
+   <View0 Encoding="ISO 8859-1" line="373" Type="Source" />
+  </Doc4>
+  <Doc5 NumberOfViews="1" URL="file:///home/pbienst/source/kwest/src/kwest.cpp" >
+   <View0 Encoding="ISO 8859-1" line="0" Type="Source" />
+  </Doc5>
+  <Doc6 NumberOfViews="1" URL="file:///home/pbienst/source/kwest/src/frotz/readme.txt" >
+   <View0 Encoding="ISO 8859-1" line="29" Type="Source" />
+  </Doc6>
+  <Doc7 NumberOfViews="1" URL="file:///home/pbienst/source/kwest/src/k_screen.cpp" >
+   <View0 Encoding="ISO 8859-1" line="0" Type="Source" />
+  </Doc7>
+  <Doc8 NumberOfViews="1" URL="file:///home/pbienst/source/kwest/src/frotz/math.c" >
+   <View0 Encoding="ISO 8859-1" line="214" Type="Source" />
+  </Doc8>
+  <Doc9 NumberOfViews="1" URL="file:///home/pbienst/source/kwest/src/kwestview.h" >
+   <View0 Encoding="ISO 8859-1" line="29" Type="Source" />
+  </Doc9>
+  <Doc10 NumberOfViews="1" URL="file:///home/pbienst/source/kwest/src/k_input.cpp" >
+   <View0 Encoding="ISO 8859-1" line="0" Type="Source" />
+  </Doc10>
+  <Doc11 NumberOfViews="1" URL="file:///home/pbienst/source/kwest/BUGS" >
+   <View0 Encoding="ISO 8859-1" line="11" Type="Source" />
+  </Doc11>
+  <Doc12 NumberOfViews="1" URL="file:///home/pbienst/source/kwest/NEWS" >
+   <View0 Encoding="ISO 8859-1" line="0" Type="Source" />
+  </Doc12>
+  <Doc13 NumberOfViews="1" URL="file:///home/pbienst/source/kwest/ChangeLog" >
+   <View0 Encoding="ISO 8859-1" line="0" Type="Source" />
+  </Doc13>
+ </DocsAndViews>
  <pluginList>
   <kdevdebugger>
    <breakpointList/>
