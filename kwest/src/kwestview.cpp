@@ -563,7 +563,8 @@ unsigned char KwestView::readLine(int max, zchar *buf, int timeout,
 	
 	    default:
 	
-	      if ((ch >= ZC_ASCII_MIN && ch <= ZC_ASCII_MAX) )
+	      if ((ch >= ZC_ASCII_MIN  && ch <= ZC_ASCII_MAX) or
+            (ch >= ZC_LATIN1_MIN && ch <= ZC_LATIN1_MAX) )
 		    {
 		      searchpos = -1;
 		      if ((scrpos == max) || (insert_flag && (len == max)))

@@ -1,4 +1,8 @@
-Version 1.1 (20070906)
+Kwest 1.1.1 (20070912)
+
+- Allow input of non-ascii latin characters (reported by Joerg Rosenbauer).
+
+Kwest 1.1 (20070906)
 
   - Added support for reading zblorb files.
   - Display cover art and bibliographic information if present.
@@ -6,14 +10,14 @@ Version 1.1 (20070906)
   - Install file associations.
   - Upgraded to Frotz 2.43.
 
-Version 1.0 (20020520)
+Kwest 1.0 (20020520)
 
   - The abbreviations 'z', 'g' and 'z' now always work.
   - Ported to KDE 3.0 (thanks to Rafal Rzepecki).
   - Fixed several runtime errors (thanks to Simon Baldwin).
   - Some other minor bug fixing and interface streamlining.
 
-Version 0.9 (20010810) - first public release
+Kwest 0.9 (20010810) - first public release
 
   - Fairly complete Z-machine interpreter, based on Frotz 2.41, supporting
     colour, styles and timed input. Not yet supported are sound and V6 pictures.
