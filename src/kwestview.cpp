@@ -23,10 +23,12 @@
 #include "kwestview.h"
 #include "kwest.h"
 
+#include "kapplication.h"
+
 #include "frotz/frotz.h"
 #include "k_frotz.h"
 
-#include <iostream.h>
+#include <iostream>
 
 extern "C" bool is_terminator(zchar);
 extern "C" int completion(const zchar *, zchar *);
@@ -44,9 +46,10 @@ extern char **history_view;
 ////////////////////////////////////////////////////////////////////////////
 
 KwestView::KwestView(QWidget *parent, const char *name)
-  : QWidget(parent, name, WRepaintNoErase)
+  : QWidget(parent)
 {
-  setFocusPolicy(QWidget::StrongFocus);
+    setWindowTitle(name);
+  setFocusPolicy(Qt::StrongFocus);
 
   key = 0;
 
@@ -79,7 +82,7 @@ KwestView::KwestView(QWidget *parent, const char *name)
 
   reverse = false;
 
-  setBackgroundMode(NoBackground);	
+  setAttribute(Qt::WA_NoBackground);
 
   fm = new QFontMetrics(textFont[0][0]);
 
@@ -316,7 +319,7 @@ void KwestView::writeInputLine(int x, char* text, int len, int cursorpos)
   if (cursorpos != -1)
     p->drawLine(xCursor, yPos+1+padding, xCursor, yPos+fm->height()-1);
 
-  bitBlt(this, x, yPos, &screenBuffer, x, yPos, width(), fontHeight);
+//  bitBlt(this, x, yPos, &screenBuffer, x, yPos, width(), fontHeight);
 }
 
 
@@ -345,10 +348,10 @@ unsigned char KwestView::readChar(int timeout)
   // reset on every timed read, not just if inactive... (SB)
 
   if (timeout)				// Always start timer on timed read
-    timer.start(timeout, true);
+    timer.start(timeout);
 
   while (!event)			// Wait for any notable event
-    kapp->processOneEvent();
+    kapp->processEvents();
 
   if (timeout)				// Ensure timeout stopped
     timer.stop();
@@ -428,17 +431,17 @@ unsigned char KwestView::readLine(int max, zchar *buf, int timeout,
     if (!forcedInput.isEmpty())
     {
       QString forced = forcedInput.first();
-      strcpy((char*)buf, forced.latin1());
+      strcpy((char*)buf, forced.toLatin1());
       len = forced.length();
 
-      forcedInput.remove(forcedInput.begin());
+      forcedInput.removeFirst();
 
       // If we have pushed two strings in forcedInput,
       // the second one is a confirmation key by design.
 
-      if (!forcedInput.isEmpty() and (forcedInput.first().latin1())[0] == 'y')
+      if (!forcedInput.isEmpty() and (forcedInput.first().toLatin1())[0] == 'y')
       {
-        forcedInput.remove(forcedInput.begin());
+        forcedInput.removeFirst();
         key = 'y';
         event = Key;
       }
@@ -647,7 +650,7 @@ void KwestView::morePrompt()
   repaint();
 
   QPixmap b(width(), fontHeight);
-  bitBlt(&b, 0, 0, &screenBuffer, 0, yPos, width(), fontHeight);
+//  bitBlt(&b, 0, 0, &screenBuffer, 0, yPos, width(), fontHeight);
 
   // Write [MORE] prompt.
 
@@ -662,7 +665,7 @@ void KwestView::morePrompt()
   // Wait for keypress and restore current line.
 
   readChar();
-  bitBlt(&screenBuffer, 0, yPos, &b, 0, 0,  width(), fontHeight);
+//  bitBlt(&screenBuffer, 0, yPos, &b, 0, 0,  width(), fontHeight);
 }
 
 
@@ -699,17 +702,17 @@ void KwestView::scroll_area(int top, int left, int bottom, int right,
   else
     if (units > 0)
     {
-      bitBlt(&screenBuffer, left, top,
-             &screenBuffer, left, top + units,
-                            right - left + 1, bottom - top - units + 1);
+//      bitBlt(&screenBuffer, left, top,
+//             &screenBuffer, left, top + units,
+//                            right - left + 1, bottom - top - units + 1);
 
       p->fillRect(left, bottom - units, right - left + 1, units + 1, bgColor);
     }
     else
     {
-      bitBlt(&screenBuffer, left, top + units,
-             &screenBuffer, left, top,
-                            right - left + 1, bottom - top + units + 1);
+//      bitBlt(&screenBuffer, left, top + units,
+//             &screenBuffer, left, top,
+//                            right - left + 1, bottom - top + units + 1);
 
       p->fillRect(left, top, right - left + 1, - units + 1, bgColor);
     }
@@ -725,11 +728,13 @@ void KwestView::scroll_area(int top, int left, int bottom, int right,
 
 void KwestView::resizeEvent(QResizeEvent* e)
 {
-  screenBuffer.resize(width(),height());
+    p->end();
+    screenBuffer = QPixmap(size());
+    p->begin(&screenBuffer);
 
-  QPainter* old_p = p;
+//  QPainter* old_p = p;
 
-  p = new QPainter(&screenBuffer);
+//  p = new QPainter(&screenBuffer);
 
   if (!clearedOnInit)
   {
@@ -737,10 +742,10 @@ void KwestView::resizeEvent(QResizeEvent* e)
     clearedOnInit = true;
   }
 
-  p->setPen (old_p->pen());
-  p->setFont(old_p->font());
+//  p->setPen (old_p->pen());
+//  p->setFont(old_p->font());
 
-  delete old_p;
+//  delete old_p;
 
   os_init_screen();
 }
@@ -756,8 +761,12 @@ void KwestView::resizeEvent(QResizeEvent* e)
 void KwestView::paintEvent(QPaintEvent* e)
 {
   QRect r = e->rect();
-  bitBlt(this, r.left(),r.top(), &screenBuffer, r.left(), r.top(),
+  QPainter painter(this);
+  painter.drawPixmap(r.left(),r.top(), screenBuffer, r.left(), r.top(),
         r.width(), r.height());
+
+//  bitBlt(this, r.left(),r.top(), &screenBuffer, r.left(), r.top(),
+//        r.width(), r.height());
 }
 
 
@@ -774,11 +783,16 @@ void KwestView::keyPressEvent(QKeyEvent* e)
 
   // Standard case.
 
-  key = e->ascii();
+  if (e->text().isEmpty()) {
+    event = None;
+      return;
+  }
+
+  key = e->text()[0].toLatin1();
 
   // Frotz hotkeys.
 
-  if (e->state() & Qt::AltButton)
+  if (e->modifiers() & Qt::ALT)
     switch (key)
     {
       case 'p': key = ZC_HKEY_PLAYBACK; return;
@@ -793,7 +807,7 @@ void KwestView::keyPressEvent(QKeyEvent* e)
 
   /* These are the Emacs-editing characters. */
 
-  if (e->state() & Qt::ControlButton)
+  if (e->modifiers() & Qt::CTRL)
     switch (key)
     {
       case 'b': key = ZC_ARROW_LEFT;  return;
@@ -843,9 +857,6 @@ void KwestView::keyPressEvent(QKeyEvent* e)
   // this event if we get to here, by simply resetting event back to None.
   // The readChar() loop "while (!event)..." will therefore not terminate
   // on such QKeyEvents. (SB)
-
-  if (e->ascii() == '\0')
-    event = None;
 }
 
 

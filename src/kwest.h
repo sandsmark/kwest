@@ -27,11 +27,11 @@
 // include files for Qt
 
 // include files for KDE 
-#include <kapp.h>
 #include <kmainwindow.h>
-#include <kaccel.h>
 #include <kaction.h>
 #include <kurl.h>
+#include <krecentfilesaction.h>
+#include <ktoggleaction.h>
 #include <ktempdir.h>
 
 class KwestView;
@@ -64,7 +64,7 @@ class KwestApp : public KMainWindow
   public slots:
 
     void openStory();
-    void openStoryNamed(const KURL& url);
+    void openStoryNamed(const QUrl& url);
     void saveGame();
     void restoreGame();
     void restartStory();
@@ -83,26 +83,26 @@ class KwestApp : public KMainWindow
   private:
 
     bool frotzRunning, shuttingDown;
-    KURL startingOther;
+    KUrl startingOther;
 
     KConfig *config;
 
     KwestView *view;
 
-    KAction* A_openStory;
+    QAction* A_openStory;
     KRecentFilesAction* A_openStoryNamed;
-    KAction* A_saveGame;
-    KAction* A_restoreGame;
-    KAction* A_restartStory;
-    KAction* A_closeStory;
-    KAction* A_quit;
-    KAction* A_setTextFont;
-    KAction* A_setFixedFont;
-    KAction* A_setTextColor;
-    KAction* A_setBgColor;
-    KAction* A_saveDisplayOptions;
-    KToggleAction* A_viewToolBar;
-    KToggleAction* A_viewStatusBar;
+    QAction* A_saveGame;
+    QAction* A_restoreGame;
+    QAction* A_restartStory;
+    QAction* A_closeStory;
+    QAction* A_quit;
+    QAction* A_setTextFont;
+    QAction* A_setFixedFont;
+    QAction* A_setTextColor;
+    QAction* A_setBgColor;
+    QAction* A_saveDisplayOptions;
+    QAction* A_viewToolBar;
+    QAction* A_viewStatusBar;
 
     QString defaultPath;
     std::vector<KTempDir> tempFiles;

@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include <stdio.h>
+#include <unistd.h>
 #include <vector>
 
 // include files for QT
@@ -34,11 +35,13 @@
 #include <kmenubar.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kfontdialog.h>
 #include <kcolordialog.h>
 #include <kstatusbar.h>
 #include <ksplashscreen.h>
+#include <ktoolbar.h>
+#include <kapplication.h>
 
 #include <setjmp.h>           // A nasty shortcut to return from main
 extern "C" jmp_buf exit_jump; // ----------------''------------------
@@ -63,9 +66,10 @@ extern "C" int frotz_main(const char* filename, const char*);
 //
 ////////////////////////////////////////////////////////////////////////////
 
-KwestApp::KwestApp(QWidget*, const char* name) :  KMainWindow(0, name)
+KwestApp::KwestApp(QWidget*, const char* name)
 {
-  config = kapp->config();
+    setWindowTitle(name);
+  config = kapp->sessionConfig();
 
   initStatusBar();
   initActions();
@@ -88,51 +92,72 @@ KwestApp::KwestApp(QWidget*, const char* name) :  KMainWindow(0, name)
 
 void KwestApp::initActions()
 {
-  A_openStory = KStdAction::open(this,SLOT(openStory()),actionCollection());
-  A_openStoryNamed = KStdAction::openRecent(this,
-    SLOT(openStoryNamed(const KURL&)), actionCollection());
+  A_openStory = KStandardAction::open(this,SLOT(openStory()), this);
+  A_openStoryNamed = KStandardAction::openRecent(this,
+    SLOT(openStoryNamed(const QUrl&)), this);
 
-  A_saveGame = new KAction(i18n("&Save game"), "save.png",
-    0, this, SLOT(saveGame()), actionCollection(),"file_save");
-  A_restoreGame = new KAction(i18n("&Restore game"), "restore.png",
-    0, this, SLOT(restoreGame()), actionCollection(),"file_restore");
-  A_restartStory = new KAction(i18n("&Restart story"), "restart.png",
-    0, this, SLOT(restartStory()), actionCollection(),"file_restart");
+  A_saveGame = KStandardAction::save(this,SLOT(saveGame()), this);
+//  A_saveGame = new QAction(QIcon("save.png"), i18n("&Save game"));
+//  connect(A_saveGame, &QAction::triggered, this, &KwestApp::saveGame);
+//    0, this, SLOT(saveGame()), actionCollection(),"file_save");
 
-  A_closeStory = KStdAction::close(this, SLOT(closeStory()), actionCollection());
-  A_quit = KStdAction::quit(this, SLOT(quit()), actionCollection());
+  A_restoreGame = new QAction(QIcon("restore.png"), i18n("&Restore game"), this);
+  connect(A_restoreGame, &QAction::triggered, this, &KwestApp::restoreGame);
+  addAction(A_restoreGame);
 
-  A_setTextFont = new KAction(i18n("&Text font"), 0, this,
-    SLOT(setTextFont()), actionCollection(), "text_font");
-  A_setFixedFont = new KAction(i18n("&Fixed font"), 0, this,
-    SLOT(setFixedFont()), actionCollection(), "fixed_font");
-  A_setTextColor = new KAction(i18n("Text &color"), 0, this,
-    SLOT(setTextColor()), actionCollection(), "text_color");
-  A_setBgColor = new KAction(i18n("&Background color"), 0, this,
-    SLOT(setBgColor()), actionCollection(), "bg_color");
-  A_saveDisplayOptions = new KAction(i18n("&Save settings"), 0, this,
-    SLOT(saveDisplayOptions()), actionCollection(), "save_display_options");
+  A_restartStory = new QAction(QIcon("restart.png"), i18n("&Restart story"), this);
+  connect(A_restartStory, &QAction::triggered, this, &KwestApp::restartStory);
+  addAction(A_restartStory);
+//    0, this, SLOT(restoreGame()), actionCollection(),"file_restore");
+//  A_restartStory = new KAction(i18n("&Restart story"), "restart.png",
+//    0, this, SLOT(restartStory()), actionCollection(),"file_restart");
 
-  A_viewToolBar = KStdAction::showToolbar(this, SLOT(viewToolBar()),
-    actionCollection());
-  A_viewStatusBar = KStdAction::showStatusbar(this, SLOT(viewStatusBar()),
-    actionCollection());
+  A_closeStory = KStandardAction::close(this, SLOT(closeStory()), this);
+  A_quit = KStandardAction::quit(this, SLOT(quit()), this);
 
-  A_openStory->setStatusText(i18n("Opens a story"));
-  A_openStoryNamed->setStatusText(i18n("Opens a story"));
-  A_saveGame->setStatusText(i18n("Saves the curent game"));
-  A_restoreGame->setStatusText("Restores a saved game");
-  A_restartStory->setStatusText(i18n("Restarts the current story"));
-  A_closeStory->setStatusText(i18n("Closes the current story"));
-  A_quit->setStatusText(i18n("Quits the application"));
-  A_setTextFont->setStatusText(i18n("Changes the text font"));
-  A_setFixedFont->setStatusText(i18n("Changes the fixed font"));
-  A_setTextColor->setStatusText(i18n("Changes the text color"));
-  A_setBgColor->setStatusText(i18n("Changes the background color"));
-  A_viewToolBar->setStatusText(i18n("Enables/disables the toolbar"));
-  A_viewStatusBar->setStatusText(i18n("Enables/disables the statusbar"));
+  A_setTextFont = new QAction(i18n("&Text font"), this);//, 0, this,
+  connect(A_setTextFont, &QAction::triggered, this, &KwestApp::setTextFont);
+  addAction(A_setTextFont);
+//    SLOT(setTextFont()), actionCollection(), "text_font");
 
-  createGUI();
+  A_setFixedFont = new QAction(i18n("&Fixed font"), this);//, 0, this,
+  connect(A_setFixedFont, &QAction::triggered, this, &KwestApp::setFixedFont);
+  addAction(A_setFixedFont);
+//    SLOT(setFixedFont()), actionCollection(), "fixed_font");
+
+  A_setTextColor = new QAction(i18n("Text &color"), this);//, 0, this,
+  connect(A_setTextColor, &QAction::triggered, this, &KwestApp::setTextColor);
+  addAction(A_setTextColor);
+//    SLOT(setTextColor()), actionCollection(), "text_color");
+
+  A_setBgColor = new QAction(i18n("&Background color"), this);//, 0, this,
+  connect(A_setBgColor, &QAction::triggered, this, &KwestApp::setBgColor);
+  addAction(A_setBgColor);
+//    SLOT(setBgColor()), actionCollection(), "bg_color");
+
+  A_saveDisplayOptions = new QAction(i18n("&Save settings"), this);//, 0, this,
+  connect(A_saveDisplayOptions, &QAction::triggered, this, &KwestApp::saveDisplayOptions);
+  addAction(A_saveDisplayOptions);
+//    SLOT(saveDisplayOptions()), actionCollection(), "save_display_options");
+
+  A_viewToolBar = KStandardAction::create(KStandardAction::ShowToolbar, this, SLOT(viewToolBar()), this);
+  A_viewStatusBar = KStandardAction::showStatusbar(this, SLOT(viewStatusBar()), this);
+
+  A_openStory->setStatusTip(i18n("Opens a story"));
+  A_openStoryNamed->setStatusTip(i18n("Opens a story"));
+  A_saveGame->setStatusTip(i18n("Saves the curent game"));
+  A_restoreGame->setStatusTip("Restores a saved game");
+  A_restartStory->setStatusTip(i18n("Restarts the current story"));
+  A_closeStory->setStatusTip(i18n("Closes the current story"));
+  A_quit->setStatusTip(i18n("Quits the application"));
+  A_setTextFont->setStatusTip(i18n("Changes the text font"));
+  A_setFixedFont->setStatusTip(i18n("Changes the fixed font"));
+  A_setTextColor->setStatusTip(i18n("Changes the text color"));
+  A_setBgColor->setStatusTip(i18n("Changes the background color"));
+  A_viewToolBar->setStatusTip(i18n("Enables/disables the toolbar"));
+  A_viewStatusBar->setStatusTip(i18n("Enables/disables the statusbar"));
+
+//  createGUI();
 }
 
 
@@ -145,17 +170,17 @@ void KwestApp::initActions()
 
 void KwestApp::initStatusBar()
 {
-  statusBar()->insertItem(i18n("Ready."), ID_STATUS_MSG);
+//  statusBar()->insertItem(i18n("Ready."), ID_STATUS_MSG);
 
-  statusBar()->insertItem(i18n("INS"),    ID_INS_MSG);
+//  statusBar()->insertItem(i18n("INS"),    ID_INS_MSG);
 
-  statusBar()->setItemAlignment
-    (ID_STATUS_MSG, AlignLeft | AlignVCenter | ExpandTabs);
+//  statusBar()->setItemAlignment
+//    (ID_STATUS_MSG, AlignLeft | AlignVCenter | ExpandTabs);
 
-  statusBar()->setItemFixed(ID_STATUS_MSG, 300);
+//  statusBar()->setItemFixed(ID_STATUS_MSG, 300);
 
-  statusBar()->setItemFixed(ID_INS_MSG,
-    QFontMetrics(font()).width("OVR") + 5);
+//  statusBar()->setItemFixed(ID_INS_MSG,
+//    QFontMetrics(font()).width("OVR") + 5);
 }
 
 
@@ -185,16 +210,16 @@ void KwestApp::initView()
 
 void KwestApp::saveGeneralOptions()
 {	
-  config->setGroup("General Options");
+  KConfigGroup cg = config->group("General Options");
 
-  config->writeEntry("Geometry", size());
-  config->writeEntry("Show Toolbar", A_viewToolBar->isChecked());
-  config->writeEntry("Show Statusbar",A_viewStatusBar->isChecked());
-  config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
+  cg.writeEntry("Geometry", size());
+  cg.writeEntry("Show Toolbar", A_viewToolBar->isChecked());
+  cg.writeEntry("Show Statusbar",A_viewStatusBar->isChecked());
+//  cg.writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->pos());
 
-  A_openStoryNamed->saveEntries(config,"Recent Files");
+  A_openStoryNamed->saveEntries(config->group("Recent Files"));
 
-  config->writeEntry("Default Path",defaultPath);
+  cg.writeEntry("Default Path",defaultPath);
 }
 
 
@@ -207,12 +232,12 @@ void KwestApp::saveGeneralOptions()
 
 void KwestApp::saveDisplayOptions()
 {	
-  config->setGroup("Display Options");
+  KConfigGroup cg = config->group("Display Options");
 
-  config->writeEntry("Text Font", view->getTextFont());
-  config->writeEntry("Fixed Font", view->getFixedFont());
-  config->writeEntry("Text Color", view->getDefaultFgColor());
-  config->writeEntry("Background Color", view->getDefaultBgColor());
+  cg.writeEntry("Text Font", view->getTextFont());
+  cg.writeEntry("Fixed Font", view->getFixedFont());
+  cg.writeEntry("Text Color", view->getDefaultFgColor());
+  cg.writeEntry("Background Color", view->getDefaultBgColor());
 }
 
 
@@ -227,44 +252,44 @@ void KwestApp::readOptions()
 {
   // General options.
 
-  config->setGroup("General Options");
+  KConfigGroup cg = config->group("General Options");
 
-  bool bViewToolbar = config->readBoolEntry("Show Toolbar", true);
+  bool bViewToolbar = cg.readEntry("Show Toolbar", true);
   A_viewToolBar->setChecked(bViewToolbar);
   viewToolBar();
 
-  bool bViewStatusbar = config->readBoolEntry("Show Statusbar", true);
+  bool bViewStatusbar = cg.readEntry("Show Statusbar", true);
   A_viewStatusBar->setChecked(bViewStatusbar);
   viewStatusBar();
 
-  KToolBar::BarPosition toolBarPos;
-  toolBarPos=(KToolBar::BarPosition)
-    config->readNumEntry("ToolBarPos", KToolBar::Top);
-  toolBar("mainToolBar")->setBarPos(toolBarPos);
+//  KToolBar::BarPosition toolBarPos;
+//  toolBarPos=(KToolBar::BarPosition)
+//    config->readNumEntry("ToolBarPos", KToolBar::Top);
+//  toolBar("mainToolBar")->setBarPos(toolBarPos);
 	
-  A_openStoryNamed->loadEntries(config,"Recent Files");
+  A_openStoryNamed->loadEntries(config->group("Recent Files"));
 
   QSize defaultSize(800,600);
-  QSize size=config->readSizeEntry("Geometry",&defaultSize);
+  QSize size=cg.readEntry("Geometry",defaultSize);
   if(!size.isEmpty())
     resize(size);
 
-  defaultPath = config->readEntry("Default Path",0);
+  defaultPath = cg.readEntry("Default Path",0);
 
   // Display options.
 
-  config->setGroup("Display Options");
+  KConfigGroup cg2 = config->group("Display Options");
 
   QFont defaultText(font());
   QFont defaultFixed("fixed");
 
-  view->setTextFont(config->readFontEntry("Text Font", &defaultText));
-  view->setFixedFont(config->readFontEntry("Fixed Font", &defaultFixed));
+  view->setTextFont(cg2.readEntry("Text Font", defaultText));
+  view->setFixedFont(cg2.readEntry("Fixed Font", defaultFixed));
 
-  view->setDefaultFgColor(config->readColorEntry("Text Color",
-    &Qt::black));
-  view->setDefaultBgColor(config->readColorEntry("Background Color",
-    &Qt::white));
+  view->setDefaultFgColor(cg2.readEntry("Text Color",
+    QColor(Qt::black)));
+  view->setDefaultBgColor(cg2.readEntry("Background Color",
+    QColor(Qt::white)));
 
   view->resetFgColor();
   view->resetBgColor();
@@ -356,7 +381,7 @@ void KwestApp::openStory()
 
       setStatusMsg(i18n("Opening story..."));
 
-      KURL url = KFileDialog::getOpenURL(defaultPath,
+      KUrl url = KFileDialog::getOpenUrl(defaultPath,
         i18n("*.z? *.dat *.zblorb *.zlb"), this,
         i18n("Open story file..."));
 
@@ -372,7 +397,7 @@ void KwestApp::openStory()
 
   setStatusMsg(i18n("Opening story..."));
 
-  KURL url = KFileDialog::getOpenURL(defaultPath,
+  KUrl url = KFileDialog::getOpenUrl(defaultPath,
     i18n("*.z? *.dat *.zblorb *.zlb"), this,
     i18n("Open story file..."));
 
@@ -392,7 +417,7 @@ void KwestApp::openStory()
 //
 ////////////////////////////////////////////////////////////////////////////
 
-void KwestApp::openStoryNamed(const KURL& url)
+void KwestApp::openStoryNamed(const QUrl &url)
 {
   if (frotzRunning)
   {
@@ -414,10 +439,10 @@ void KwestApp::openStoryNamed(const KURL& url)
 
   // Check if this is a blorb file.
 
-  KURL newUrl(url);
-  if (url.filename().endsWith(".zblorb") || url.filename().endsWith(".zlb"))
+  KUrl newUrl(url);
+  if (url.fileName().endsWith(".zblorb") || url.fileName().endsWith(".zlb"))
   {   
-    char* result = babel_init(const_cast<char*>(url.path().latin1()));
+    char* result = babel_init(const_cast<char*>(url.path().toLatin1().constData()));
 
     if (result == NULL)
     {
@@ -434,7 +459,7 @@ void KwestApp::openStoryNamed(const KURL& url)
     
     KTempDir tmp_dir;
     tempFiles.push_back(tmp_dir);
-    chdir(tmp_dir.name());
+    chdir(tmp_dir.name().toLatin1().constData());
     
     babel_story_unblorb();
     babel_release();
@@ -443,7 +468,7 @@ void KwestApp::openStoryNamed(const KURL& url)
 
     QDomDocument doc;
     QFile file(tmp_dir.name()+IFID+".iFiction");
-    if(!file.open(IO_ReadOnly))
+    if(!file.open(QIODevice::ReadOnly))
     {
       KMessageBox::error(this, i18n("Failed to open iFiction file."));
       return;
@@ -479,13 +504,13 @@ void KwestApp::openStoryNamed(const KURL& url)
             while (!n.isNull())
             {           
               QDomElement e = n.toElement();
-              if (e.tagName().lower() == "title")
+              if (e.tagName().toLower() == "title")
                 title = e.text();
-              if (e.tagName().lower() == "author")
+              if (e.tagName().toLower() == "author")
                 author = e.text();
-              if (e.tagName().lower() == "headline")
+              if (e.tagName().toLower() == "headline")
                 headline = e.text();
-              if (e.tagName().lower() == "description")
+              if (e.tagName().toLower() == "description")
                 description = e.text();
               n = n.nextSibling();
             }
@@ -499,7 +524,7 @@ void KwestApp::openStoryNamed(const KURL& url)
     // Show splash screen.
 
     view->erase_screen();
-    if (title)
+    if (!title.isEmpty())
       setCaption(title, false);
     
     QMessageBox splash(title, "",
@@ -519,10 +544,10 @@ void KwestApp::openStoryNamed(const KURL& url)
       p.load(tmp_dir.name()+IFID+".png");
     
     float scale = 480./p.width();
-    QWMatrix m;
+    QMatrix m;
     m.scale(scale,scale);
     
-    splash.setIconPixmap(p.xForm(m));
+    splash.setIconPixmap(p.transformed(m));
     
     if (not p.isNull() or description.length() != 0)
       splash.exec();
@@ -537,12 +562,12 @@ void KwestApp::openStoryNamed(const KURL& url)
 
   if (title.length() == 0)
     setCaption(url.fileName(), false);
-  A_openStoryNamed->addURL(url);
+  A_openStoryNamed->addUrl(url);
 
   setStatusMsg(i18n("Running story."));
   setStoryRunning(true);
 
-  int result = frotz_main(newUrl.path().latin1(), url.fileName());
+  int result = frotz_main(newUrl.path().toLatin1().constData(), url.fileName().toLatin1().constData());
 
   if (result != 0)
     setCaption("", false);
@@ -559,7 +584,7 @@ void KwestApp::openStoryNamed(const KURL& url)
 
   if (!startingOther.isEmpty())
   {
-    KURL newStory(startingOther);
+    KUrl newStory(startingOther);
     startingOther = "";
     openStoryNamed(newStory);
   }
@@ -795,8 +820,9 @@ void KwestApp::viewStatusBar()
 
 void KwestApp::setStatusMsg(const QString &text)
 {
-  statusBar()->clear();
-  statusBar()->changeItem(text, ID_STATUS_MSG);
+    statusBar()->showMessage(text);
+//  statusBar()->clear();
+//  statusBar()->changeItem(text, ID_STATUS_MSG);
 }
 
 
@@ -809,7 +835,8 @@ void KwestApp::setStatusMsg(const QString &text)
 
 void KwestApp::setINSMsg(const QString &text)
 {
-  statusBar()->clear();
-  statusBar()->changeItem(text, ID_INS_MSG);
+    statusBar()->showMessage(text);
+//  statusBar()->clear();
+//  statusBar()->changeItem(text, ID_INS_MSG);
 }
 

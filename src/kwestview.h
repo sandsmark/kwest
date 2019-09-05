@@ -26,7 +26,6 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qtimer.h>
-#include <qvaluelist.h>
 
 class KwestView : public QWidget
 {
@@ -65,7 +64,7 @@ class KwestView : public QWidget
 
     void selectFontAndStyle(int font, int style);
 
-    int charWidth(QChar c) const {return fm->width(c);}
+    int charWidth(QChar c) const {return fm->horizontalAdvance(c);}
 
     void writeString(QString s);
     void flushLineBuffer();
@@ -94,7 +93,7 @@ class KwestView : public QWidget
 
     void keyPressEvent(QKeyEvent* e);
     unsigned char key;
-    QValueList<QString> forcedInput;
+    QStringList forcedInput;
     EventType event;
 
     QColor colorMap[13];

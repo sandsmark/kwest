@@ -26,7 +26,6 @@
 
 #include "frotz/frotz.h"
 #include "k_frotz.h"
-#include <kapp.h>
 #include <kfiledialog.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
@@ -263,7 +262,7 @@ int os_read_file_name(char *file_name, const char *default_name, int flag)
       break;
   }
 
-  KURL url = KFileDialog::getOpenURL
+  QUrl url = KFileDialog::getOpenUrl
     (QString(default_name), filter, global_kwestview, caption);
 
   if (url.path().length() == 0)
@@ -275,7 +274,7 @@ int os_read_file_name(char *file_name, const char *default_name, int flag)
     return -1;
   }
 
-  strcpy(file_name, url.path().latin1());
+  strcpy(file_name, url.path().toLatin1());
 
   // Restore state of playback and recording.
 

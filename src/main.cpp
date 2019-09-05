@@ -16,9 +16,10 @@
  ***************************************************************************/
 
 #include <kcmdlineargs.h>
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <klocale.h>
 #include <kurl.h>
+#include <kapplication.h>
 
 #include <setjmp.h> // A nasty shortcut to return from main
 jmp_buf exit_jump;  // ----------------''------------------
@@ -28,53 +29,51 @@ jmp_buf exit_jump;  // ----------------''------------------
 static const char *description =
   I18N_NOOP("Kwest - a Z-code interpreter based on Frotz 2.43");
 
-static KCmdLineOptions options[] =
-{
-  { "+[File]", I18N_NOOP("file to open"), 0 },
-  { 0, 0, 0 }
-};
+#define VERSION "1"
 
 int main(int argc, char *argv[])
 {
-  KAboutData aboutData("kwest", I18N_NOOP("Kwest"),
-    VERSION, description, KAboutData::License_GPL,
-    "2001-2007, Peter Bienstman, based on code by David Griffith and others.",
-    0,"http://kwest.sourceforge.net",
+  K4AboutData aboutData("kwest", "kwest", ki18n("Kwest"),
+    VERSION, ki18n(description), K4AboutData::License_GPL,
+    ki18n("2001-2007, Peter Bienstman, based on code by David Griffith and others."),
+    ki18n("http://kwest.sourceforge.net"),
     "Peter.Bienstman@UGent.be");
-  aboutData.addAuthor("Peter Bienstman",
-                      "Main author",
+  aboutData.addAuthor(ki18n("Peter Bienstman"),
+                      ki18n("Main author"),
                       "Peter.Bienstman@UGent.be",
                       "http://kwest.sourceforge.net");
-  aboutData.addAuthor("Simon Baldwin",
-                      "Bug fixes",
+  aboutData.addAuthor(ki18n("Simon Baldwin"),
+                      ki18n("Bug fixes"),
                       "simon_baldwin@yahoo.com",
                       "http://www.geocities.com/simon_baldwin");
-  aboutData.addAuthor("Rafal Rzepecki",
-                      "Bug fixes",
+  aboutData.addAuthor(ki18n("Rafal Rzepecki"),
+                      ki18n("Bug fixes"),
                       "divide@thepentagon.com");
-  aboutData.addAuthor("David Griffith",
-                      "Frotz Unix port, Frotz reference code",
+  aboutData.addAuthor(ki18n("David Griffith"),
+                      ki18n("Frotz Unix port, Frotz reference code"),
                       "dgriffi@cs.csubak.edu",
                       "http://www.cs.csubak.edu/~dgriffi/frotz/");
-  aboutData.addAuthor("Jim Dunleavy",
-                      "Frotz reference code",
+  aboutData.addAuthor(ki18n("Jim Dunleavy"),
+                      ki18n("Frotz reference code"),
                       "jim.dunleavy@erha.ie");
-  aboutData.addAuthor("Galen Hazelwood",
-                      "Original Frotz Unix port",
+  aboutData.addAuthor(ki18n("Galen Hazelwood"),
+                      ki18n("Original Frotz Unix port"),
                       "galenh@micron.net");
-  aboutData.addAuthor("Stefan Jokisch",
-                      "Original Frotz reference code",
+  aboutData.addAuthor(ki18n("Stefan Jokisch"),
+                      ki18n("Original Frotz reference code"),
                       "s.jokisch@avu.de");
-  aboutData.addAuthor("L. Ross Raszewski",
-                      "Treaty of Babel code",
+  aboutData.addAuthor(ki18n("L. Ross Raszewski"),
+                      ki18n("Treaty of Babel code"),
                       "rraszews@trenchcoatsoft.com");
   
   KCmdLineArgs::init(argc, argv, &aboutData);
+  KCmdLineOptions options;
+  options.add("+[File]", ki18n("file to open"));
   KCmdLineArgs::addCmdLineOptions(options);
 
   KApplication app;
 
-  if (app.isRestored())
+  if (app.isSessionRestored())
   {
     RESTORE(KwestApp);
   }
@@ -87,7 +86,7 @@ int main(int argc, char *argv[])
 
     if (args->count())
     {
-      KURL url("file:///");
+      KUrl url("file:///");
       if (args->arg(0)[0] != '/')
         url.addPath(getcwd(NULL, 0));
       url.addPath(args->arg(0));

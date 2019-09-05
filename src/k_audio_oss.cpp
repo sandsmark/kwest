@@ -39,6 +39,7 @@
 #include <sys/types.h>
 #include <sys/ioctl.h>
 #include <sys/wait.h>
+#include <QApplication>
 
 
 extern void end_of_sound(void);
@@ -146,11 +147,11 @@ static void play_sound(int volume, int repeats) {
  *
  */
 
-#include "kaudioplayer.h"
+//#include "kaudioplayer.h"
 
 void os_beep (int number)
 {
-  KAudioPlayer::play("KDE_Beep_ShortBeep.wav");
+    QApplication::beep();
 
     /* This should later be expanded to support high and low beeps as well
      * as checking to see if Frotz was started in quiet mode.
